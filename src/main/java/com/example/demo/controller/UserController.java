@@ -1,38 +1,59 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.JWTauthToken;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("api/v1/users")
+@RequestMapping("/users")
 public class UserController {
-    private final UserService users;
+
+    private final UserService userService;
+
     @Autowired
-    public UserController(UserService users) {
-        this.users = users;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
-    @GetMapping("/allUsers")
-    public List<User> getUsers(){
-        return users.getUser();
-    };
-    @PostMapping("/adduser")
-    public void registerNewUser(@RequestBody User user){
-        users.addNewUser(user);
+
+    @GetMapping("/all")
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
-    @DeleteMapping(path="{userId}")
-    public void deleteUser(@PathVariable("userId")Long id){
-        users.deleteUser(id);
+
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
     }
-    @PutMapping("update")
-    @PatchMapping
-    public void updateUser(@RequestBody User userUpdate){
-        users.updateUser(userUpdate);
+
+    @PostMapping("/register")
+    public JWTauthToken addUser(@RequestBody User user) {
+        return userService.addUser(user);
     }
+
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+        return userService.updateUser(id, userDetails);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+    }
+
+    @PostMapping("/login")
+    public JWTauthToken findByGmailAndPassword(@RequestBody Map<String, String> credentials) {
+        String email = credentials.get("email");
+        String password = credentials.get("password");
+        JWTauthToken token=    userService.login(email, password);
+        return new JWTauthToken("");
+    }
+
 }

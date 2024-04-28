@@ -1,64 +1,76 @@
 package com.example.demo.service;
 
-import  ch.qos.logback.classic.spi.IThrowableProxy;
+import com.example.demo.dto.JWTauthToken;
+import com.example.demo.service.JwtService;
 import com.example.demo.entity.User;
-import com.example.demo.entity.Vacancy;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.repository.VacancyRepository;
-import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.format.DateTimeFormatter;
+
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
-    @Autowired
-    public UserService(UserRepository repository) {
-        this.userRepository = repository;
-    }
+    private  final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
-    public List<User> getUser(){
+
+    public List<User> getAllUsers() {
         return userRepository.findAll();
-
     }
-    public void addNewUser(User user){
-        String email= user.getGmail();
-
-        Optional<User> userByGmail = userRepository.findUserByGmail(user.getGmail());
-        if(userByGmail.isPresent()){
-            throw new IllegalStateException("email token");
-        }
-        userRepository.save(user);
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
-    public  void deleteUser(Long userId){
-        boolean exists=userRepository.existsById(userId);
-        if (!exists){
-            throw new IllegalStateException("user whith id : "+userId+" does not exists");
+
+    public JWTauthToken addUser(User user) {
+        if (userRepository.existsByGmail(user.getGmail())) {
+            throw new RuntimeException("Email is already taken");
         }
-        else {
-            userRepository.deleteById(userId);
-        }
+         userRepository.save(user);
+        String jwt =jwtService.generateToken(user);
+        return new JWTauthToken(jwt);
     }
-    public void updateUser(User user) {
-        Long id = user.getId();
-        User userUp = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("User with id does not exist"));
-
-        Optional<User> userByEmail = userRepository.findUserByGmail(user.getGmail());
-        if (userByEmail.isPresent() && !userByEmail.get().getId().equals(user.getId())) {
-            throw new IllegalStateException("Email is already taken");
-        }
+//    public UserDetailsService userDetailsService(){
+//        return  userRepository.getById();
+//    }
 
 
-        userRepository.save(user);
+
+    public User updateUser(Long id, User userDetails) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        user.setLastName(userDetails.getLastName());
+        user.setFirstName(userDetails.getFirstName());
+        user.setGmail(userDetails.getGmail());
+        user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+        user.setRole(userDetails.getRole());
+        user.setBirthdate(userDetails.getBirthdate());
+
+        return userRepository.save(user);
     }
-    public User getById(Long Id){
-        return userRepository.getById(Id);
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public JWTauthToken login(String email, String password) {
+        try {
+            userRepository.findByGmailAndPassword(email, password);
+            return new JWTauthToken("");
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 

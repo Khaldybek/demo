@@ -33,7 +33,9 @@ public class Vacancy {
     private int salaryA;
     private int salaryB;
     private LocalDate date;
-
+    @ManyToOne
+    @JoinColumn(name = "vacancy_id")
+    private VacancyCategory category;
     private String location;
     private  int experience;
 

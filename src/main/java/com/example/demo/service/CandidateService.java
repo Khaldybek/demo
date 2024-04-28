@@ -16,10 +16,8 @@ public class CandidateService {
     public CandidateService(CandidateRepository repository) {
         this.repository = repository;
     }
-    public Candidate createCandidate(Candidatedto candidate) {
-        Candidate candidate1=new Candidate();
-
-        return repository.save(candidate1);
+    public Candidate createCandidate(Candidate candidate) {
+        return repository.save(candidate);
     }
 
     public List<Candidate> getAllCandidates() {
@@ -39,7 +37,5 @@ public class CandidateService {
         repository.deleteById(id);
     }
 
-    public List<Candidate> getCandidatesByName(String name) {
-        return repository.findByUser_Name(name);
-    }
+
 }

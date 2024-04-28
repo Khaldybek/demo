@@ -23,7 +23,7 @@ public class VacancyService {
     }
     public String addVacancy(VacancyDto dto){
         Vacancy vacancy=new Vacancy();
-        vacancy.setCompany(company.getById(dto.getCompany_id()));
+        vacancy.setCompany(company.getUserById(dto.getCompany_id()));
         vacancy.setName(dto.getName());
         vacancy.setDescp(dto.getDescp());
         vacancy.setSalaryA(dto.getSalaryA());

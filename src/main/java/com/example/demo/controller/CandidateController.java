@@ -21,8 +21,8 @@ public class CandidateController {
     }
 
     @PostMapping("/create")
-    public Candidate createCandidate(@RequestBody Candidatedto candidatedto) {
-        return service.createCandidate(candidatedto);
+    public Candidate createCandidate(@RequestBody Candidate candidate) {
+        return service.createCandidate(candidate);
     }
 
     @GetMapping("/all")
@@ -45,8 +45,5 @@ public class CandidateController {
         service.deleteCandidateById(id);
     }
 
-    @GetMapping("/byname/{name}")
-    public List<Candidate> getCandidatesByName(@PathVariable String name) {
-        return service.getCandidatesByName(name);
-    }
+
 }
