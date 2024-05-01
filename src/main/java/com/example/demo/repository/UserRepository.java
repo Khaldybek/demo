@@ -6,12 +6,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User findByGmailAndPassword(String gmail, String password);
+    Optional<User> findByGmailAndPassword(String gmail, String password);
 
     boolean existsByGmail(String gmail);
 
-    OOptional<User> findByGmail(String gmail);
+    Optional<User> findByGmail(String gmail);
+
+    @Query("SELECT u FROM User u")
+    List<User> getAllUsers();
 }

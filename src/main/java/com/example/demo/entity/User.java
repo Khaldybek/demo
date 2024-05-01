@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
+import com.example.demo.token.Token;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-
+@Builder
 public class User implements UserDetails {
     @Id
     @SequenceGenerator(
@@ -39,23 +41,30 @@ public class User implements UserDetails {
             nullable = false
     )
     private String firstName;
+    @NotNull
     @Column(unique = true ,
     nullable = false)
     private String gmail;
+
     @Column(
             nullable = false
     )
+    @NotNull
     private String password;
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(
             nullable = false
     )
     private Role role;
+
     @Column(
             nullable = false
     )
     private LocalDate birthdate;
 
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

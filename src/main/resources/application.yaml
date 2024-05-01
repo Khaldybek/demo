@@ -5,6 +5,9 @@ server:
   error:
     include-message: always
 spring:
+  main:
+    allow-circular-references: true
+
   datasource:
     driver-class-name: org.postgresql.Driver
     username: postgres
@@ -18,6 +21,10 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-token:
-  sign:
-    secret-key : 53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days
