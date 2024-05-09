@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import com.example.demo.token.Token;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -62,7 +63,7 @@ public class User implements UserDetails {
             nullable = false
     )
     private LocalDate birthdate;
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
 

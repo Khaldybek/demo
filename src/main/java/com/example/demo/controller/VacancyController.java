@@ -25,13 +25,25 @@ public class VacancyController {
     public List<Vacancy> getVacancies(){
         return vacancyService.getVacancy();
     };
-    @PostMapping("/add_group")
+    @PostMapping("/add")
     public String getVacancies(@RequestBody  VacancyDto dto){
         return vacancyService.addVacancy(dto);
     };
     @GetMapping("/byname/{name}")
     public List<Vacancy> getVacanciesByName( @PathVariable  String name){
         return vacancyService.getByName(name);
+    }
+    @DeleteMapping("/{id}")
+    public void delete( @PathVariable  Long id){
+        vacancyService.delete(id);
+    }
+    @GetMapping("/{id}")
+    public Vacancy getVacancy( @PathVariable  int id){
+        return vacancyService.getById((long) id);
+    }
+    @GetMapping("/all")
+    public List<Vacancy> getVacanciesByName(){
+        return vacancyService.getVacancy();
     }
     @PutMapping("/update")
     public  String updateVacancy(Vacancy vac){

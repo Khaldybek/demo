@@ -33,8 +33,7 @@ public class AuthenticationService {
         if(repository.existsByGmail(request.getGmail())){
             return null;
         }
-        Role role= Role.USER;
-        role.convertRoleStringToEnum(request.getRole());
+        Role role = Role.fromString(request.getRole());
         User user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -69,6 +68,7 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .user(user)
                 .build();
     }
 

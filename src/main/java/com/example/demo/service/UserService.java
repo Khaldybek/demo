@@ -32,7 +32,9 @@ public class UserService {
 
         repository.save(user);
     }
-
+    public List<User> getAllCompanies() {
+        return repository.getAllCompanies();
+    }
 
     public List<User> getAllUsers() {
        return repository.getAllUsers();

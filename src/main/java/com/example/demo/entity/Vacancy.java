@@ -1,10 +1,11 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 
 @Entity
@@ -13,6 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Vacancy {
     @Id
     @SequenceGenerator(
@@ -27,17 +29,21 @@ public class Vacancy {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "company_id")
+    @JsonIgnore
     private User company;
     private String name;
     private String descp ;
     private int salaryA;
     private int salaryB;
+    @Column(name = "experience")
+    private int exp;
+    private String img;
     private LocalDate date;
     @ManyToOne
     @JoinColumn(name = "vacancy_id")
     private VacancyCategory category;
+    private String century;
     private String location;
-    private  int experience;
 
 
 

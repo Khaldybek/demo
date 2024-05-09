@@ -20,6 +20,6 @@ public class VacancyCategory {
             generator = "category_sequence"
     )
     private Long id;
-
+    @Column(unique = true)
     private String name;
 }

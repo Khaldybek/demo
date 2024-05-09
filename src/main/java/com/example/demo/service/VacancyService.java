@@ -7,14 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class VacancyService {
     private final VacancyRepository vacancyRepository;
     private  final UserService company;
+    private  final CategoryService categoryService;
+
     @Autowired
-    public VacancyService(VacancyRepository vacancyRepository, UserService company) {
+    public VacancyService(VacancyRepository vacancyRepository, UserService company,CategoryService categoryService) {
         this.vacancyRepository = vacancyRepository;
         this.company = company;
+        this.categoryService=categoryService;
+
     }
 
     public List<Vacancy> getVacancy(){
@@ -28,12 +34,15 @@ public class VacancyService {
         vacancy.setDescp(dto.getDescp());
         vacancy.setSalaryA(dto.getSalaryA());
         vacancy.setSalaryB(dto.getSalaryB());
+        vacancy.setImg(dto.getImg());
         vacancy.setDate(dto.getDate());
         vacancy.setLocation(dto.getLocation());
-        vacancy.setExperience(dto.getExperience());
+        vacancy.setExp(dto.getExp());
+        vacancy.setCentury(dto.getCentury());
+        vacancy.setCategory(categoryService.getVacancyCategoryById(Long.valueOf(dto.getCategory())));
 
         vacancyRepository.save(vacancy);
-        return "Added"+dto.getName()+""+vacancy.getName();
+        return "Added "+dto.getName()+""+vacancy.getName();
 
     }
 
@@ -42,6 +51,14 @@ public class VacancyService {
     }
     public String updateVacancy(Vacancy vacancy){
         vacancyRepository.save(vacancy);
-        return "succes";
+        return "success";
+    }
+    public void delete(Long id){
+        vacancyRepository.deleteById(id);
+
+    }
+    public Vacancy getById(Long id){
+        return vacancyRepository.getById(id);
+
     }
 }

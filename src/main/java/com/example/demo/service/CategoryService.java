@@ -17,15 +17,20 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
     public VacancyCategory createVacancyCategory(VacancyCategory category) {
-        return categoryRepository.save(category);
+    if (categoryRepository.existsByName(category.getName())) {
+        return null;
     }
 
+    else {
+        return categoryRepository.save(category);
+    }
+    }
     public List<VacancyCategory> getAllVacancyCategory() {
         return categoryRepository.findAll();
     }
 
-    public Optional<VacancyCategory> getVacancyCategoryById(Long id) {
-        return categoryRepository.findById(id);
+    public VacancyCategory getVacancyCategoryById(Long id) {
+        return categoryRepository.getVacancyCategoriesById(id);
     }
 
     public VacancyCategory updateVacancyCategory(Long id, VacancyCategory newVacancyCategory) {

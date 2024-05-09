@@ -4,14 +4,17 @@ public enum Role {
     ADMIN,
     COMPANY,
     USER;
-    public Role convertRoleStringToEnum(String roleString) {
-        switch(roleString.toLowerCase()) {
+    public static Role fromString(String roleString) {
+        if (roleString == null) {
+            throw new IllegalArgumentException("Role string cannot be null");
+        }
+        switch (roleString.toLowerCase()) {
             case "user":
-                return Role.USER;
+                return USER;
             case "company":
-                return Role.COMPANY;
+                return COMPANY;
             case "admin":
-                return Role.ADMIN;
+                return ADMIN;
             default:
                 throw new IllegalArgumentException("Invalid role: " + roleString);
         }

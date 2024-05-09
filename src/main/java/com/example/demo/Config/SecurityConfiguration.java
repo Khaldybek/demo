@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.List;
 
 import static com.example.demo.entity.Role.ADMIN;
+import static com.example.demo.entity.Role.COMPANY;
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -30,12 +31,16 @@ public class SecurityConfiguration {
     private static final String[] WHITE_LIST_URL = {"/api/v1/auth/register",
 
             "/api/v1/auth/authenticate",
+            "api/v1/category/create",
+            "api/v1/category/create",
+            "api/v1/category/all",
             "/swagger-resources",
             "/swagger-resources/**",
             "/configuration/ui",
             "/configuration/security",
             "/swagger-ui/**",
             "/webjars/**",
+            "/all",
             "/swagger-ui.html"};
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
@@ -56,6 +61,7 @@ public class SecurityConfiguration {
                 }))
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL) .permitAll()
+//                                .requestMatchers("api/v1/category/create").hasAnyRole(COMPANY.name())
                                 .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name())
                                 .anyRequest().permitAll()
 
