@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Candidate;
 import com.example.demo.dto.Candidatedto;
+import com.example.demo.entity.Vacancy;
 import com.example.demo.service.CandidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class CandidateController {
     }
 
     @PostMapping("/create")
-    public Candidate createCandidate(@RequestBody Candidate candidate) {
+    public Candidate createCandidate(@RequestBody Candidatedto candidate) {
         return service.createCandidate(candidate);
     }
 
@@ -35,9 +36,9 @@ public class CandidateController {
         return service.getCandidateById(id);
     }
 
-    @PutMapping("/update")
-    public Candidate updateCandidate(@RequestBody Candidatedto candidatedto) {
-        return service.updateCandidate(candidatedto);
+    @GetMapping("/vacancies/{id}")
+    public List<Vacancy> getVacanciesWhereUserCandidate(@PathVariable  int id){
+        return service.vacanciesThisUserCandidate(id);
     }
 
     @DeleteMapping("/delete/{id}")

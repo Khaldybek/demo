@@ -45,6 +45,10 @@ public class VacancyController {
     public List<Vacancy> getVacanciesByName(){
         return vacancyService.getVacancy();
     }
+    @GetMapping("/allVacan/{id}")
+    public List<Vacancy> getVacanciesByName(@PathVariable  int id){
+        return vacancyService.getVacancyforEmployee(id);
+    }
     @PutMapping("/update")
     public  String updateVacancy(Vacancy vac){
         return vacancyService.updateVacancy(vac);

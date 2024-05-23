@@ -27,6 +27,10 @@ public class VacancyService {
         return vacancyRepository.findAll();
 
     }
+    public List<Vacancy> getVacancyforEmployee(int id){
+        return vacancyRepository.findVacanciesWhereNotCandidate((long)id);
+
+    }
     public String addVacancy(VacancyDto dto){
         Vacancy vacancy=new Vacancy();
         vacancy.setCompany(company.getUserById(dto.getCompany_id()));

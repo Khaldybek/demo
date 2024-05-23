@@ -10,6 +10,7 @@ import com.example.demo.token.TokenType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -71,7 +72,7 @@ public class AuthenticationService {
                 .user(user)
                 .build();
     }
-
+    @Transactional
     private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()
                 .user(user)
